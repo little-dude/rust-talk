@@ -1,0 +1,380 @@
+\documentclass{beamer}
+
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue, anchorcolor=blue}
+\usepackage{minted}
+\usepackage{multicol} % https://tex.stackexchange.com/a/225691/32098
+
+\usetheme{bjeldbak}
+\setbeamertemplate{footline}{
+	\begin{beamercolorbox}[colsep=1.25pt]{lower separation line foot}
+	\hfill\scriptsize{\insertframenumber/\inserttotalframenumber}
+	\end{beamercolorbox}
+}
+\setbeamercovered{invisible}
+
+\AtBeginSection[]{
+    \begin{frame}
+        \vfill
+        {\footnotesize{\tableofcontents[currentsection, hideothersubsections]}}
+        \vfill
+    \end{frame}
+}
+
+\AtBeginSubsection[]{
+    \begin{frame}
+        \vfill
+        \begin{center}
+            \Large{\insertsubsection\par}
+        \end{center}
+        \vfill
+    \end{frame}
+}
+
+\begin{document}
+
+{%
+	% enleve l'entete de la page de titre
+	\setbeamertemplate{headline}{}
+		
+	% enleve le pied de page 
+	\setbeamertemplate{footline}{
+		\begin{beamercolorbox}[colsep=1.25pt]{lower separation line foot}
+		\end{beamercolorbox}} 
+    \title{Rust}
+    \author{Corentin Henry}
+    \institute{Nuage Networks}    
+    \date{February, 2018}
+    \frame{\titlepage}
+}
+\addtocounter{framenumber}{-2}
+
+\begin{frame}
+    \begin{center}
+        \texttt{Rust} is a systems programming language that runs blazingly fast, prevents segfaults, and guarantees thread safety. 
+    \end{center}
+\end{frame}
+
+
+\begin{frame}
+    \begin{itemize}
+        \item zero-cost abstractions
+        \item \fbox{guaranteed memory safety}
+        \item \fbox{threads without data races}
+        \item trait-based generics
+        \item pattern matching
+        \item type inference
+        \item minimal runtime
+        \item efficient C bindings
+    \end{itemize}
+\end{frame}
+
+\section{Memory safety}
+
+\begin{frame}
+    \frametitle{What is memory safety?}
+    \begin{itemize}
+        \item buffer overflow, over-read
+        \item use after free, double free, invalid free
+        \item race conditions
+        \item dangling pointer dereference
+        \item stack exhaustion
+        \item heap exhaustion
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \begin{multicols}{2}
+        \inputminted[fontsize=\tiny]{c}{code/vec_no_comment.c}
+    \end{multicols}
+\end{frame}
+
+\begin{frame}
+    \begin{multicols}{2}
+        \inputminted[fontsize=\tiny]{c}{code/vec.c}
+    \end{multicols}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Mitigations: C++}
+    Smart pointers, RAII, move semantics: \texttt{unique\_ptr},
+    \texttt{shared\_ptr}, \texttt{weak\_ptr}
+
+    \begin{itemize}
+        \item control
+        \item zero cost abstractions
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Good but not enough}
+    \inputminted[]{c++}{code/invalid_ref.cpp}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Good but not enough}
+    \inputminted[]{c++}{code/invalid_ref_commented.cpp}
+\end{frame}
+
+\begin{frame}
+    \frametitle{What about GC?}
+    \begin{itemize}
+        \item performance cost
+        \item memory usage cost
+        \item loss of control
+        \item does not everything: data races, iterator invalidation, NPEs, etc.
+    \end{itemize}
+\end{frame}
+
+\section{Ownership and Borrowing}
+
+\subsection{Ownership}
+
+\begin{frame}
+    \inputminted[fontsize=\scriptsize]{rust}{code/ownership.rs}
+\end{frame}
+
+\begin{frame}
+    \inputminted[fontsize=\scriptsize]{rust}{code/ownership2.rs}
+\end{frame}
+
+\begin{frame}
+    \inputminted[fontsize=\scriptsize]{rust}{code/ownership3.rs}
+\end{frame}
+
+\begin{frame}
+    \begin{center}
+        What if we want to use the data after?
+    \end{center}
+\end{frame}
+
+\subsection{Borrowing}
+
+\begin{frame}
+    \begin{center}
+        Shared borrows (\texttt{\&T})
+
+        \vspace{3em}
+
+        Mutable borrows (\texttt{\&mut T})
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \begin{center}
+        Shared borrow (\texttt{\&T}):
+
+        \vspace{3em}
+        
+        multiple read-only references to data.
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Shared borrow}
+    \inputminted[fontsize=\scriptsize]{rust}{code/shared_borrow.rs}
+\end{frame}
+
+\begin{frame}
+    \begin{center}
+        Mutable borrow (\texttt{\&mut T})
+        
+        \vspace{3em}
+        
+        Single read/write reference to data.
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Mutable borrow (1)}
+    \inputminted[fontsize=\scriptsize]{rust}{code/mutable_borrow1.rs}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Mutable borrow (2)}
+    \inputminted[fontsize=\scriptsize]{rust}{code/mutable_borrow2.rs}
+\end{frame}
+
+\section{Concurrency}
+
+\begin{frame}
+    \begin{itemize}
+        \frametitle{Concurrency Pitfalls}
+        \item resource starvation (deadlocks, livelocks)
+        \item data races:
+            \begin{itemize}
+                \item two (or more) threads access the same memory concurrently
+                \item at least one is writing
+                \item there is no synchronisation
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Data race recipe}
+    \begin{center}
+        Mutation + Aliasing + No ordering
+    \end{center}
+\end{frame}
+
+% \begin{frame}
+%     \begin{center}
+%         No data race <=> No accidentally shared state
+%     \end{center}
+% \end{frame}
+
+\begin{frame}
+    \frametitle{Concurrency paradigms}
+    \begin{itemize}
+        \item isolated message passing
+        \item split-join
+        \item shared state
+    \end{itemize}
+\end{frame}
+
+\section{Fearless concurrency}
+
+
+\begin{frame}
+    \frametitle{Isolated message passing rules}
+    \begin{itemize}
+        \item threads communicate through channels
+        \item no shared state: do not acces data after sending it
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Enforcing rules with Ownership}
+    \inputminted[fontsize=\tiny]{rust}{code/isolated_message_passing.rs}
+\end{frame}
+
+\begin{frame}
+    Rust captures at compile time, the discipline of message passing programming
+\end{frame}
+
+\begin{frame}
+    \frametitle{Shared State rules}
+    Share data, but synchronise accesses:
+    \begin{itemize}
+        \item only one thread can access the data (lock)
+        \item \texttt{N} threads can \textbf{read} the data \textit{or} 1 thread can \textbf{write} it (rwlock)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Shared State with Borrowing + Ownership}
+        \begin{itemize}
+            \item no thread owns the data
+            \item \texttt{Mutex<T>} owns the data
+            \item threads share a non-mutable reference to the lock (borrowing)
+            \item only one way to access the data: locking the lock
+        \end{itemize}
+        \vspace{1.5em}
+        \inputminted{rust}{code/lock.rs}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Shared State: Borrowing + Ownership}
+    Rust captures at compile time, the discipline of lock programming.
+    % cannot forget to lock => no other way to access the data
+    % cannot forget to unlock
+\end{frame}
+
+\begin{frame}
+    \frametitle{A word about thread safety}
+    \begin{itemize}
+        \item thread safety is encoded in the type system and statically checked
+        \item \texttt{Send} marker: it is safe to send the type to another thread
+        \item \texttt{Sync} marker: it is safe to have multiple read-only references of the type between threads (\texttt{\&T} is \texttt{Send})
+    \end{itemize}
+\end{frame}
+
+
+
+% \begin{frame}
+%     \begin{center}
+%         Rust type system
+%     \end{center}
+% \end{frame}
+% 
+% \begin{frame}
+% 
+%     A set of rules that assigns a property called type to the various constructs program (variables, expressions, functions...).
+% 
+%     \begin{itemize}
+%         \item correctness: checking semantics (\mintinline{python}{1 / "foo"})
+%         \item safety
+%         \item abstractions (string vs array of bytes)
+%         \item documentation (timestamp type instead of integer)
+%         \item compiler optimizations (memory alignment)
+%     \end{itemize}
+% 
+% \end{frame}
+% 
+% \begin{frame}
+%     \frametitle{Type safety (1)}
+%         \begin{center}
+%             "Well typed" programs cannot go wrong
+%         \end{center}
+% \end{frame}
+% 
+% \begin{frame}
+%     \frametitle{Type safety (2)}
+%         \begin{itemize}
+%             \item Well typed: respects the rules of the type system
+%             \item Going wrong: exhibiting undefined behavior (UB)
+%         \end{itemize}
+% \end{frame}
+% 
+% \begin{frame}
+%     \frametitle{C/C++ are not type-safe}
+%     \begin{center}
+%         \begin{minipage}[t]{0.6\textwidth}
+%             \inputminted[fontsize=\scriptsize]{c}{code/type_unsafe.c}
+%             \vspace{1em}
+%             \hline
+%             \vspace{1em}
+%             \inputminted[fontsize=\scriptsize]{cpp}{code/type_unsafe.cpp}
+%         \end{minipage}
+%     \end{center}
+% \end{frame}
+% 
+% 
+% \begin{frame}
+%     \begin{center}
+%         Abstractions
+%     \end{center}
+% \end{frame}
+% 
+% \begin{frame}
+%     \begin{itemize}
+%         \item Structs and tuples
+%         \item Polymorphism:
+%             \begin{itemize}
+%                 \item Traits
+%                 \item Generics
+%             \end{itemize}
+%         \item \texttt{Enum} (\textit{aka} algebraic data types, \textit{aka} sum types)
+%     \end{itemize}
+% \end{frame}
+% 
+% \begin{frame}
+%     \frametitle{Structs}
+%     \begin{multicols}{2}
+%         \inputminted[fontsize=\tiny]{rust}{code/struct.rs}
+%     \end{multicols}
+% \end{frame}
+% 
+% \begin{frame}
+%     \frametitle{Traits are basically interfaces}
+%     \begin{multicols}{2}
+%         \inputminted[fontsize=\scriptsize]{rust}{code/trait.rs}
+%         \vspace{8em}
+%         \begin{itemize}
+%             \item traits can be implemented on existing types
+%             \item traits must be in scope to be used
+%         \end{itemize}
+%     \end{multicols}
+% \end{frame}
+
+\end{document}
