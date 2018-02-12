@@ -7,9 +7,9 @@
 
 \usetheme{bjeldbak}
 \setbeamertemplate{footline}{
-	\begin{beamercolorbox}[colsep=1.25pt]{lower separation line foot}
-	\hfill\scriptsize{\insertframenumber/\inserttotalframenumber}
-	\end{beamercolorbox}
+    \begin{beamercolorbox}[colsep=1.25pt]{lower separation line foot}
+        \hfill\scriptsize{\insertframenumber/\inserttotalframenumber}
+    \end{beamercolorbox}
 }
 \setbeamercovered{invisible}
 
@@ -34,13 +34,12 @@
 \begin{document}
 
 {%
-	% enleve l'entete de la page de titre
-	\setbeamertemplate{headline}{}
-		
-	% enleve le pied de page 
-	\setbeamertemplate{footline}{
-		\begin{beamercolorbox}[colsep=1.25pt]{lower separation line foot}
-		\end{beamercolorbox}} 
+    % remove header in title slice
+    \setbeamertemplate{headline}{}
+    % remove footer
+    \setbeamertemplate{footline}{
+        \begin{beamercolorbox}[colsep=1.25pt]{lower separation line foot}
+        \end{beamercolorbox}} 
     \title{Rust}
     \author{Corentin Henry}
     \institute{Nuage Networks}    
@@ -54,7 +53,6 @@
         \texttt{Rust} is a systems programming language that runs blazingly fast, prevents segfaults, and guarantees thread safety. 
     \end{center}
 \end{frame}
-
 
 \begin{frame}
     \begin{itemize}
@@ -165,7 +163,7 @@
         Shared borrow (\texttt{\&T}):
 
         \vspace{3em}
-        
+
         multiple read-only references to data.
     \end{center}
 \end{frame}
@@ -178,9 +176,9 @@
 \begin{frame}
     \begin{center}
         Mutable borrow (\texttt{\&mut T})
-        
+
         \vspace{3em}
-        
+
         Single read/write reference to data.
     \end{center}
 \end{frame}
@@ -199,7 +197,7 @@
 
 \begin{frame}
     \begin{itemize}
-        \frametitle{Concurrency Pitfalls}
+            \frametitle{Concurrency Pitfalls}
         \item resource starvation (deadlocks, livelocks)
         \item data races:
             \begin{itemize}
@@ -216,12 +214,6 @@
         Mutation + Aliasing + No ordering
     \end{center}
 \end{frame}
-
-% \begin{frame}
-%     \begin{center}
-%         No data race <=> No accidentally shared state
-%     \end{center}
-% \end{frame}
 
 \begin{frame}
     \frametitle{Concurrency paradigms}
@@ -289,92 +281,24 @@
     \end{itemize}
 \end{frame}
 
+\section{Tooling}
+
+\begin{frame}
+    \begin{itemize}
+        \item package management (\texttt{Cargo})
+        \item builtin documentation (cross references, markdown, runnable examples)
+        \item builtin testing
+        \item builtin benchmarking
+        \item linter (\texttt{clippy})
+        \item formatter (\texttt{Rustfmt})
+    \end{itemize}
+\end{frame}
 
 
-% \begin{frame}
-%     \begin{center}
-%         Rust type system
-%     \end{center}
-% \end{frame}
-% 
-% \begin{frame}
-% 
-%     A set of rules that assigns a property called type to the various constructs program (variables, expressions, functions...).
-% 
-%     \begin{itemize}
-%         \item correctness: checking semantics (\mintinline{python}{1 / "foo"})
-%         \item safety
-%         \item abstractions (string vs array of bytes)
-%         \item documentation (timestamp type instead of integer)
-%         \item compiler optimizations (memory alignment)
-%     \end{itemize}
-% 
-% \end{frame}
-% 
-% \begin{frame}
-%     \frametitle{Type safety (1)}
-%         \begin{center}
-%             "Well typed" programs cannot go wrong
-%         \end{center}
-% \end{frame}
-% 
-% \begin{frame}
-%     \frametitle{Type safety (2)}
-%         \begin{itemize}
-%             \item Well typed: respects the rules of the type system
-%             \item Going wrong: exhibiting undefined behavior (UB)
-%         \end{itemize}
-% \end{frame}
-% 
-% \begin{frame}
-%     \frametitle{C/C++ are not type-safe}
-%     \begin{center}
-%         \begin{minipage}[t]{0.6\textwidth}
-%             \inputminted[fontsize=\scriptsize]{c}{code/type_unsafe.c}
-%             \vspace{1em}
-%             \hline
-%             \vspace{1em}
-%             \inputminted[fontsize=\scriptsize]{cpp}{code/type_unsafe.cpp}
-%         \end{minipage}
-%     \end{center}
-% \end{frame}
-% 
-% 
-% \begin{frame}
-%     \begin{center}
-%         Abstractions
-%     \end{center}
-% \end{frame}
-% 
-% \begin{frame}
-%     \begin{itemize}
-%         \item Structs and tuples
-%         \item Polymorphism:
-%             \begin{itemize}
-%                 \item Traits
-%                 \item Generics
-%             \end{itemize}
-%         \item \texttt{Enum} (\textit{aka} algebraic data types, \textit{aka} sum types)
-%     \end{itemize}
-% \end{frame}
-% 
-% \begin{frame}
-%     \frametitle{Structs}
-%     \begin{multicols}{2}
-%         \inputminted[fontsize=\tiny]{rust}{code/struct.rs}
-%     \end{multicols}
-% \end{frame}
-% 
-% \begin{frame}
-%     \frametitle{Traits are basically interfaces}
-%     \begin{multicols}{2}
-%         \inputminted[fontsize=\scriptsize]{rust}{code/trait.rs}
-%         \vspace{8em}
-%         \begin{itemize}
-%             \item traits can be implemented on existing types
-%             \item traits must be in scope to be used
-%         \end{itemize}
-%     \end{multicols}
-% \end{frame}
+\begin{frame}
+    \begin{center}
+        Thank you
+    \end{center}
+\end{frame}
 
 \end{document}

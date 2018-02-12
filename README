@@ -1,1 +1,1 @@
-build with `pdflatex -shell-escape presentation.tex`
+build with `pdflatex -interaction=nonstopmode -shell-escape presentation.tex`
