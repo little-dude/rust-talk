@@ -1,1 +1,33 @@
-build with `pdflatex -interaction=nonstopmode -shell-escape presentation.tex`
+This is a presentation I made for an internal talk to introduce Rust. The
+target audience is mostly C and C++ developpers, and the talk is mostly focused
+on memory safety and concurrency.
+
+Build
+-----
+
+You'll need a LaTeX distribution installed, as well as the `minted` package.
+Build with:
+
+```pdflatex -interaction=nonstopmode -shell-escape presentation.tex```
+
+
+References
+----------
+
+These are some resources I used to make this talk. I don't know much about C++
+so the biggest challenge was to learn about how RAII works in C++, and how it
+compared to Rust.
+
+- [users.rust-lang.org topic I created to prepare the talk](https://users.rust-lang.org/t/preparing-an-internal-talk-for-c-and-java-devs)
+- [@aaturon talk on which I based a lot of my own talk](https://www.infoq.com/presentations/rust-thread-safety)
+- [Programming Rust book which has a good section about memory safety and type safety](https://www.amazon.com/Programming-Rust-Fast-Systems-Development/dp/1491927283/)
+- [A nice blog post by @willcrichton from which I took the C example](http://willcrichton.net/notes/rust-memory-safety/)
+- [An old and outdated article by @steveklabnik about pointers in Rust](http://words.steveklabnik.com/pointers-in-rust-a-guide)
+- various resources about C++ smart pointers (some are outdated, incorrect, or
+  opinionated, but well the talk is about Rust, not C++):
+    - [here](https://www.codeproject.com/Articles/541067/Cplusplus-Smart-Pointers)
+    - [here](http://seanmiddleditch.com/dangers-of-stdshared_ptr/)
+    - [here (outdated)](http://ootips.org/yonat/4dev/smart-pointers.html)
+    - [here](http://ootips.org/yonat/4dev/smart-pointers.html)
+    - [here](http://www.acodersjourney.com/2016/05/top-10-dumb-mistakes-avoid-c-11-smart-pointers/)
+    - [here](http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/)

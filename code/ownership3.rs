@@ -5,8 +5,6 @@ fn main() {
 
     let elem = &vec[0];
     take(vec); // err: cannot move out of borrowed content
-
-    println!("elem = {}", elem); // &elem might be invalid
 }
 
 fn take(vec: Vec) {

@@ -100,19 +100,31 @@
 
     \begin{itemize}
         \item control
-        \item zero cost abstractions
+        \item (almost) zero cost abstractions
     \end{itemize}
 \end{frame}
 
 \begin{frame}
     \frametitle{Good but not enough}
-    \inputminted[]{c++}{code/invalid_ref.cpp}
+    \begin{itemize}
+        \item some runtime costs (atomic reference counting in \texttt{shared\_ptr})
+        \item bugs still possible
+        \item manual checks (\texttt{weak\_ptr} expiration, \texttt{nullptr} in \texttt{unique\_ptr})
+        \item runtime validation, instead of compile time
+    \end{itemize}
 \end{frame}
 
 \begin{frame}
-    \frametitle{Good but not enough}
-    \inputminted[]{c++}{code/invalid_ref_commented.cpp}
+    \inputminted{c++}{code/bad_move.cpp}
 \end{frame}
+
+\begin{frame}
+    \inputminted{c++}{code/invalid_ref.cpp}
+\end{frame}
+
+% \begin{frame}
+%     \inputminted{c++}{code/invalid_ref_commented.cpp}
+% \end{frame}
 
 \begin{frame}
     \frametitle{What about GC?}
@@ -236,7 +248,7 @@
 \end{frame}
 
 \begin{frame}
-    \frametitle{Enforcing rules with Ownership}
+    \frametitle{Isolated message passing in Rust}
     \inputminted[fontsize=\tiny]{rust}{code/isolated_message_passing.rs}
 \end{frame}
 
@@ -254,7 +266,7 @@
 \end{frame}
 
 \begin{frame}
-    \frametitle{Shared State with Borrowing + Ownership}
+    \frametitle{Shared State in Rust}
         \begin{itemize}
             \item no thread owns the data
             \item \texttt{Mutex<T>} owns the data
@@ -266,7 +278,6 @@
 \end{frame}
 
 \begin{frame}
-    \frametitle{Shared State: Borrowing + Ownership}
     Rust captures at compile time, the discipline of lock programming.
     % cannot forget to lock => no other way to access the data
     % cannot forget to unlock
@@ -295,10 +306,20 @@
 \end{frame}
 
 
-\begin{frame}
-    \begin{center}
-        Thank you
-    \end{center}
-\end{frame}
+\section*{}
+
+{%
+    % remove header in title slice
+    \setbeamertemplate{headline}{}
+    % remove footer
+    \setbeamertemplate{footline}{
+        \begin{beamercolorbox}[colsep=1.25pt]{lower separation line foot}
+        \end{beamercolorbox}} 
+    \begin{frame}
+        \begin{center}
+            The end
+        \end{center}
+    \end{frame}
+}
 
 \end{document}
