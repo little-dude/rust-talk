@@ -9,7 +9,8 @@ Vec* vec_new() {
   vec.data = NULL;
   vec.length = 0;
   vec.capacity = 1;
-  // pointer to stack allocated memory
+  // pointer to stack
+  // allocated memory
   return &vec;
 }
 
@@ -21,6 +22,8 @@ void vec_push(Vec* vec, int n) {
   vec->data[vec->length] = n;
   ++vec->length;
 }
+
+
 
 void vec_free(Vec* vec) {
   free(vec);

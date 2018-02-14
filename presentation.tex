@@ -41,6 +41,7 @@
         \begin{beamercolorbox}[colsep=1.25pt]{lower separation line foot}
         \end{beamercolorbox}} 
     \title{Rust}
+    \subtitle{Fast, Safe Systems Development}
     \author{Corentin Henry}
     \institute{Nuage Networks}    
     \date{February, 2018}
@@ -49,21 +50,11 @@
 \addtocounter{framenumber}{-2}
 
 \begin{frame}
-    \begin{center}
-        \texttt{Rust} is a systems programming language that runs blazingly fast, prevents segfaults, and guarantees thread safety. 
-    \end{center}
-\end{frame}
-
-\begin{frame}
+    \frametitle{Promises}
     \begin{itemize}
-        \item zero-cost abstractions
-        \item \fbox{guaranteed memory safety}
-        \item \fbox{threads without data races}
-        \item trait-based generics
-        \item pattern matching
-        \item type inference
-        \item minimal runtime
-        \item efficient C bindings
+        \item memory safety (no segfault!)
+        \item no data-race
+        \item all at compile time
     \end{itemize}
 \end{frame}
 
@@ -72,7 +63,7 @@
 \begin{frame}
     \frametitle{What is memory safety?}
     \begin{itemize}
-        \item buffer overflow, over-read
+        \item buffer overflow, over-read (heart-bleed)
         \item use after free, double free, invalid free
         \item race conditions
         \item dangling pointer dereference
@@ -83,23 +74,23 @@
 
 \begin{frame}
     \begin{multicols}{2}
-        \inputminted[fontsize=\tiny]{c}{code/vec_no_comment.c}
+        \inputminted[fontsize=\scriptsize]{c}{code/vec1.c}
     \end{multicols}
 \end{frame}
 
 \begin{frame}
-    \begin{multicols}{2}
-        \inputminted[fontsize=\tiny]{c}{code/vec.c}
-    \end{multicols}
+    \inputminted[fontsize=\scriptsize]{c}{code/vec2.c}
+\end{frame}
+
+\begin{frame}
+    \inputminted[fontsize=\scriptsize]{c}{code/vec3.c}
 \end{frame}
 
 \begin{frame}
     \frametitle{Mitigations: C++}
-    Smart pointers, RAII, move semantics: \texttt{unique\_ptr},
-    \texttt{shared\_ptr}, \texttt{weak\_ptr}
-
+    Smart pointers, RAII, move semantics: \texttt{unique\_ptr}, \texttt{shared\_ptr}, \texttt{weak\_ptr}
     \begin{itemize}
-        \item control
+        \item control % What you don’t use, you don’t pay for. And further: What you do use, you couldn’t hand code any better.
         \item (almost) zero cost abstractions
     \end{itemize}
 \end{frame}
@@ -108,9 +99,9 @@
     \frametitle{Good but not enough}
     \begin{itemize}
         \item some runtime costs (atomic reference counting in \texttt{shared\_ptr})
-        \item bugs still possible
         \item manual checks (\texttt{weak\_ptr} expiration, \texttt{nullptr} in \texttt{unique\_ptr})
         \item runtime validation, instead of compile time
+        \item bugs still possible
     \end{itemize}
 \end{frame}
 
@@ -127,7 +118,7 @@
 % \end{frame}
 
 \begin{frame}
-    \frametitle{What about GC?}
+    \frametitle{What about garbage collection?}
     \begin{itemize}
         \item performance cost
         \item memory usage cost
@@ -207,6 +198,8 @@
 
 \section{Concurrency}
 
+\subsection{Concepts}
+
 \begin{frame}
     \begin{itemize}
             \frametitle{Concurrency Pitfalls}
@@ -236,8 +229,7 @@
     \end{itemize}
 \end{frame}
 
-\section{Fearless concurrency}
-
+\subsection{Fearless concurrency}
 
 \begin{frame}
     \frametitle{Isolated message passing rules}
@@ -316,9 +308,8 @@
         \begin{beamercolorbox}[colsep=1.25pt]{lower separation line foot}
         \end{beamercolorbox}} 
     \begin{frame}
-        \begin{center}
-            The end
-        \end{center}
+        \frametitle{The End}
+        Memory safety, no data-race, all at compile time
     \end{frame}
 }
 
